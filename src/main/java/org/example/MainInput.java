@@ -12,7 +12,7 @@ public class MainInput {
 
 
     public static final Map<String, AbstractHandler> handlers = new HashMap<>();
-
+    public static final List<String> methods = List.of("get", "put", "delete", "post");
 
     public static void run() {
         Scanner scanner = new Scanner(System.in);
@@ -36,7 +36,7 @@ public class MainInput {
 
     private static String secondMenu(Scanner scanner, String input2) {
         if (!methods.contains(input2)) {
-//            repeatSecondMenu(scanner, input2);
+            repeatSecondMenu(scanner, input2);
             run();
         }
         return input2;
@@ -48,7 +48,7 @@ public class MainInput {
         return input2;
     }
 
-    private static String getSelect(Scanner scanner, String text) {
+    public static String getSelect(Scanner scanner, String text) {
         System.out.println(text);
         return scanner.nextLine().toLowerCase().trim();
     }
