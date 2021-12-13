@@ -1,20 +1,13 @@
 package org.example.handlers;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.example.model.pet.Pet;
 import org.example.model.pet.Pets;
-import org.example.service.HttpActions;
-import org.example.service.Supplier;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Scanner;
+
 
 public class PetHandler extends AbstractHandler {
 
@@ -98,11 +91,11 @@ public class PetHandler extends AbstractHandler {
         supplier.ordinaryMsg("Print new pet status. Available status: sold, pending, available");
         pet.setStatus(scanner.next());
 
-        File file=new File("pet.json");
+        File file = new File("pet.json");
         try {
             file.createNewFile();
         } catch (IOException e) {
-            LOGGER.error("File not created",e);
+            LOGGER.error("File not created", e);
         }
         FileWriter fileWriter = null;
         try {
@@ -126,5 +119,10 @@ public class PetHandler extends AbstractHandler {
         httpActions.post();
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());
+    }
+
+    @Override
+    protected void put() {
+        
     }
 }

@@ -1,23 +1,28 @@
 package org.example.service;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.example.MainInput;
 import org.example.model.pet.Category;
 import org.example.model.pet.Pet;
 import org.example.model.pet.Pets;
 import org.example.model.pet.Tag;
+import org.example.model.store.Store;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Supplier {
 
     public static final Logger LOGGER = Logger.getLogger(Supplier.class);
+    private final TypeToken<HashMap<String, Integer>> inventoryTypeToken = new TypeToken<>(){};
 
     private static Supplier instance;
     Gson gson = new Gson();
@@ -50,8 +55,18 @@ public class Supplier {
     }
 
     public Pet collectPet(HttpResponse response) {
-                Pet pet = gson.fromJson(String.valueOf(response.body()), Pet.class);
+        Pet pet = gson.fromJson(String.valueOf(response.body()), Pet.class);
         return pet;
+    }
+
+    public Store collectStore(HttpResponse response) {
+        Store store = gson.fromJson(String.valueOf(response.body()), Store.class);
+        return store;
+    }
+
+    public HashMap<String,Integer> inventoryStoreMap(HttpResponse response){
+        HashMap<String,Integer> o = gson.fromJson(String.valueOf(response.body()), inventoryTypeToken.getType());
+        return o;
     }
 
     public Pets collectPets(HttpResponse response) {
@@ -85,11 +100,11 @@ public class Supplier {
         cat.setName(scanner.next());
         pet.setCategory(cat);
 
-        File file=new File("pet.json");
+        File file = new File("pet.json");
         try {
             file.createNewFile();
         } catch (IOException e) {
-            LOGGER.error("File not created",e);
+            LOGGER.error("File not created", e);
         }
         FileWriter fileWriter = null;
         try {
@@ -100,7 +115,6 @@ public class Supplier {
         } catch (IOException e) {
             LOGGER.error("File no writed", e);
         }
-
 
 
     }

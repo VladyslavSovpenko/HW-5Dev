@@ -2,12 +2,8 @@ package org.example.handlers;
 
 import com.google.gson.Gson;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.example.model.pet.Pet;
-import org.example.model.pet.Pets;
 import org.example.service.HttpActions;
 import org.example.service.Supplier;
-
-import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 public abstract class AbstractHandler {
@@ -42,26 +38,25 @@ public abstract class AbstractHandler {
 
 
     protected void get() {
-
     }
-
 
 
     protected void post() {
-
-        }
+    }
 
 
     protected void put() {
-
     }
 
     protected void delete() {
-
         System.out.println("Print " + getTemplateName() + " id");
         String answer = scanner.next().trim();
 
+
         if (NumberUtils.isDigits(answer)) {
+            if (getTemplateName().equals("store")){
+            answer="order/"+answer;
+        }
             httpActions.delete(answer, getTemplateName());
         } else {
             supplier.errorMsg("Print correct pets id");
