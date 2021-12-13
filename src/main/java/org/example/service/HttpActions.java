@@ -65,18 +65,21 @@ public class HttpActions {
         return response;
     }
 
-    public HttpResponse post(){
+    public HttpResponse post(String templateName) {
 
-        String url = "https://petstore.swagger.io/v2/pet";
+        String url = "https://petstore.swagger.io/v2/%s";
 
         HttpRequest request = null;
         try {
-            request = HttpRequest.newBuilder()
-                    .uri(new URI(url))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofFile(Path.of("pet.json")))
-                    .build();
-        } catch (FileNotFoundException | URISyntaxException e) {
+            if (templateName.equals("store")){
+                url=url+"/order";
+            }
+                request = HttpRequest.newBuilder()
+                        .uri(URI.create(String.format(url, templateName)))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofFile(Path.of("pet.json")))
+                        .build();
+        } catch (FileNotFoundException e) {
             LOGGER.error("File not found or URI is wrong", e);
         }
 
@@ -86,7 +89,7 @@ public class HttpActions {
         } catch (IOException | InterruptedException e) {
             LOGGER.error("Problem with get response", e);
         }
-        if (response.statusCode()==200){
+        if (response.statusCode() == 200) {
             supplier.ordinaryMsg("Record was created/updated");
         }
         return response;

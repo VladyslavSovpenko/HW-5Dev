@@ -20,6 +20,14 @@ public class StoreHandler extends AbstractHandler {
     }
 
     @Override
+    protected void post() {
+        supplier.createStore(scanner);
+        httpActions.post(getTemplateName());
+        supplier.ordinaryMsg("Continue? Yes/No");
+        supplier.continueQuestion(scanner.next().trim());
+    }
+
+    @Override
     protected void get() {
         supplier.ordinaryMsg("Get by id or inventory?");
         String answer = scanner.next().trim().toLowerCase();

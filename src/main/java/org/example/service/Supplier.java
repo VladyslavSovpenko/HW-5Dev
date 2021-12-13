@@ -14,15 +14,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Supplier {
 
     public static final Logger LOGGER = Logger.getLogger(Supplier.class);
-    private final TypeToken<HashMap<String, Integer>> inventoryTypeToken = new TypeToken<>(){};
+    private final TypeToken<HashMap<String, Integer>> inventoryTypeToken = new TypeToken<>() {
+    };
 
     private static Supplier instance;
     Gson gson = new Gson();
@@ -64,8 +63,8 @@ public class Supplier {
         return store;
     }
 
-    public HashMap<String,Integer> inventoryStoreMap(HttpResponse response){
-        HashMap<String,Integer> o = gson.fromJson(String.valueOf(response.body()), inventoryTypeToken.getType());
+    public HashMap<String, Integer> inventoryStoreMap(HttpResponse response) {
+        HashMap<String, Integer> o = gson.fromJson(String.valueOf(response.body()), inventoryTypeToken.getType());
         return o;
     }
 
@@ -115,7 +114,38 @@ public class Supplier {
         } catch (IOException e) {
             LOGGER.error("File no writed", e);
         }
+    }
 
+    public void createStore(Scanner scanner) {
+        Store store = new Store();
+        ordinaryMsg("Please, print store id");
+        store.setId(scanner.nextInt());
+        ordinaryMsg("Please, print petId id");
+        store.setPetId(scanner.nextInt());
+        ordinaryMsg("Please, print quantity id");
+        store.setQuantity(scanner.nextInt());
+        ordinaryMsg("Please, print status");
+        store.setStatus(scanner.next());
+        ordinaryMsg("Please, print complete. True/False");
+        store.setComplete(scanner.next());
+        Date date = new Date(System.currentTimeMillis());
+        store.setShipDate(date);
+
+        File file = new File("store.json");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            LOGGER.error("File not created", e);
+        }
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(file);
+            fileWriter.write(gson.toJson(store));
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            LOGGER.error("File no wrote", e);
+        }
 
     }
 }

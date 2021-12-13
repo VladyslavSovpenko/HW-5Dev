@@ -106,7 +106,7 @@ public class PetHandler extends AbstractHandler {
         } catch (IOException e) {
             LOGGER.error("File not wrote", e);
         }
-        httpActions.post();
+        httpActions.post(getTemplateName());
 
     }
 
@@ -116,7 +116,7 @@ public class PetHandler extends AbstractHandler {
 
     private void newPet() {
         supplier.createPets(scanner);
-        httpActions.post();
+        httpActions.post(getTemplateName());
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());
     }
