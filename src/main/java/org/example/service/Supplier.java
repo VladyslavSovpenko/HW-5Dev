@@ -9,6 +9,7 @@ import org.example.model.pet.Pet;
 import org.example.model.pet.Pets;
 import org.example.model.pet.Tag;
 import org.example.model.store.Store;
+import org.example.model.user.User;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -63,6 +64,11 @@ public class Supplier {
         return store;
     }
 
+    public User collectUser(HttpResponse response){
+        User user = gson.fromJson(String.valueOf(response.body()), User.class);
+        return user;
+    }
+
     public HashMap<String, Integer> inventoryStoreMap(HttpResponse response) {
         HashMap<String, Integer> o = gson.fromJson(String.valueOf(response.body()), inventoryTypeToken.getType());
         return o;
@@ -74,7 +80,8 @@ public class Supplier {
         return pets;
     }
 
-    public void createPets(Scanner scanner) {
+    public Pet createPets(Scanner scanner) {
+
         Pet pet = new Pet();
         ordinaryMsg("Please, print pet id");
         pet.setId(scanner.nextInt());
@@ -99,24 +106,11 @@ public class Supplier {
         cat.setName(scanner.next());
         pet.setCategory(cat);
 
-        File file = new File("pet.json");
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            LOGGER.error("File not created", e);
-        }
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(file);
-            fileWriter.write(gson.toJson(pet));
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            LOGGER.error("File no writed", e);
-        }
+       return pet;
     }
 
-    public void createStore(Scanner scanner) {
+    public Store createStore(Scanner scanner) {
+
         Store store = new Store();
         ordinaryMsg("Please, print store id");
         store.setId(scanner.nextInt());
@@ -131,22 +125,45 @@ public class Supplier {
         Date date = new Date(System.currentTimeMillis());
         store.setShipDate(date);
 
-        File file = new File("store.json");
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            LOGGER.error("File not created", e);
-        }
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(file);
-            fileWriter.write(gson.toJson(store));
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            LOGGER.error("File no wrote", e);
-        }
-
+        return store;
     }
+
+    public User createUser(Scanner scanner){
+        User user = new User();
+        ordinaryMsg("Please, print user id");
+        user.setId(scanner.nextLong());
+        ordinaryMsg("Please, print username");
+        user.setUsername(scanner.next());
+        ordinaryMsg("Please, print lastName");
+        user.setLastName(scanner.next());
+        ordinaryMsg("Please, print email");
+        user.setEmail(scanner.next());
+        ordinaryMsg("Please, print password");
+        user.setPassword(scanner.next());
+        ordinaryMsg("Please, print phone");
+        user.setPhone(scanner.next());
+        ordinaryMsg("Please, print userStatus");
+        user.setUserStatus(scanner.nextLong());
+
+        return user;
+    }
+
+     public void saveToFile(Object object){
+         File file = new File("result.json");
+         try {
+             file.createNewFile();
+         } catch (IOException e) {
+             LOGGER.error("File not created", e);
+         }
+         FileWriter fileWriter = null;
+         try {
+             fileWriter = new FileWriter(file);
+             fileWriter.write(gson.toJson(object));
+             fileWriter.flush();
+             fileWriter.close();
+         } catch (IOException e) {
+             LOGGER.error("File not wrote", e);
+         }
+     }
 }
 

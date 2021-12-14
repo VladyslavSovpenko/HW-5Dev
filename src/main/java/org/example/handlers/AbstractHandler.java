@@ -36,7 +36,6 @@ public abstract class AbstractHandler {
         }
     }
 
-
     protected void get() {
     }
 
@@ -51,7 +50,6 @@ public abstract class AbstractHandler {
     protected void delete() {
         System.out.println("Print " + getTemplateName() + " id");
         String answer = scanner.next().trim();
-
 
         if (NumberUtils.isDigits(answer)) {
             if (getTemplateName().equals("store")){

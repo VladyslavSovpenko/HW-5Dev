@@ -91,21 +91,8 @@ public class PetHandler extends AbstractHandler {
         supplier.ordinaryMsg("Print new pet status. Available status: sold, pending, available");
         pet.setStatus(scanner.next());
 
-        File file = new File("pet.json");
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            LOGGER.error("File not created", e);
-        }
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(file);
-            fileWriter.write(gson.toJson(pet));
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            LOGGER.error("File not wrote", e);
-        }
+        supplier.saveToFile(pet);
+
         httpActions.post(getTemplateName());
 
     }
@@ -115,7 +102,8 @@ public class PetHandler extends AbstractHandler {
     }
 
     private void newPet() {
-        supplier.createPets(scanner);
+        Pet pet = supplier.createPets(scanner);
+        supplier.saveToFile(pet);
         httpActions.post(getTemplateName());
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());

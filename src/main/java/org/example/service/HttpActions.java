@@ -36,9 +36,9 @@ public class HttpActions {
             LOGGER.error("Delete action problem", e);
         }
         if (response.statusCode() == 200) {
-            supplier.ordinaryMsg("Record with id= " + answer + " was deleted");
+            supplier.ordinaryMsg("Record with id = " + answer + " was deleted");
         } else {
-            supplier.ordinaryMsg("Record with id= " + answer + " was not deleted");
+            supplier.ordinaryMsg("Record with id = " + answer + " was not deleted");
         }
     }
 
@@ -53,12 +53,6 @@ public class HttpActions {
         HttpResponse response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                supplier.ordinaryMsg("Record with params " + statusOrId + " are get");
-
-            } else {
-                supplier.ordinaryMsg("Record with params \"" + statusOrId + "\" were not received ");
-            }
         } catch (IOException | InterruptedException e) {
             LOGGER.error("Problem with get response", e);
         }
@@ -71,14 +65,14 @@ public class HttpActions {
 
         HttpRequest request = null;
         try {
-            if (templateName.equals("store")){
-                url=url+"/order";
+            if (templateName.equals("store")) {
+                url = url + "/order";
             }
-                request = HttpRequest.newBuilder()
-                        .uri(URI.create(String.format(url, templateName)))
-                        .header("Content-Type", "application/json")
-                        .POST(HttpRequest.BodyPublishers.ofFile(Path.of("pet.json")))
-                        .build();
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(String.format(url, templateName)))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofFile(Path.of("pet.json")))
+                    .build();
         } catch (FileNotFoundException e) {
             LOGGER.error("File not found or URI is wrong", e);
         }

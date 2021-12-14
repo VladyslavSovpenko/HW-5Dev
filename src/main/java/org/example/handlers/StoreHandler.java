@@ -1,8 +1,6 @@
 package org.example.handlers;
 
-import org.example.model.pet.Pet;
 import org.example.model.store.Store;
-
 import java.net.http.HttpResponse;
 import java.util.*;
 
@@ -21,7 +19,8 @@ public class StoreHandler extends AbstractHandler {
 
     @Override
     protected void post() {
-        supplier.createStore(scanner);
+        Store store = supplier.createStore(scanner);
+        supplier.saveToFile(store);
         httpActions.post(getTemplateName());
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());
@@ -52,7 +51,7 @@ public class StoreHandler extends AbstractHandler {
         HttpResponse response = httpActions.get(getTemplateName(), params, "");
         HashMap<String, Integer> inventoryStoreMap = supplier.inventoryStoreMap(response);
         inventoryStoreMap.entrySet().forEach(entry -> {
-            supplier.ordinaryMsg(entry.getKey()+ " "+entry.getValue());
+            supplier.ordinaryMsg(entry.getKey() + " " + entry.getValue());
         });
     }
 
