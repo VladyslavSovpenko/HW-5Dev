@@ -3,10 +3,19 @@ package org.example.handlers;
 import org.apache.log4j.Logger;
 import org.example.model.pet.Pet;
 import org.example.model.pet.Pets;
-import java.io.File;
-import java.io.FileWriter;
+
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class PetHandler extends AbstractHandler {
@@ -78,7 +87,7 @@ public class PetHandler extends AbstractHandler {
                 break;
             default:
                 System.out.println("Please enter correct info");
-                get();
+                post();
         }
     }
 
@@ -90,15 +99,24 @@ public class PetHandler extends AbstractHandler {
         pet.setName(scanner.next());
         supplier.ordinaryMsg("Print new pet status. Available status: sold, pending, available");
         pet.setStatus(scanner.next());
-
         supplier.saveToFile(pet);
-
         httpActions.post(getTemplateName());
+        supplier.ordinaryMsg("Continue? Yes/No");
+        supplier.continueQuestion(scanner.next().trim());
 
     }
 
-    private void addImage() {
+    private void addImage(){
+        supplier.ordinaryMsg("Print pet id");
+        String params = scanner.next()+"/uploadImage";
+        supplier.ordinaryMsg("Print image name");
+        String name = scanner.next();
 
+        Map<Object, Object> data = new HashMap<>();
+        data.put("attachment1", Paths.get(name));
+        httpActions.postImage(params, data);
+        supplier.ordinaryMsg("Continue? Yes/No");
+        supplier.continueQuestion(scanner.next().trim());
     }
 
     private void newPet() {
@@ -111,6 +129,6 @@ public class PetHandler extends AbstractHandler {
 
     @Override
     protected void put() {
-        
+        newPet();
     }
 }

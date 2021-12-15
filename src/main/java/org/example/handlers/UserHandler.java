@@ -120,6 +120,8 @@ public class UserHandler extends AbstractHandler {
         }
         supplier.saveToFile(users);
         httpActions.post(getTemplateName());
+        supplier.ordinaryMsg("Continue? Yes/No");
+        supplier.continueQuestion(scanner.next().trim());
     }
 
     private void postList() {
@@ -131,12 +133,37 @@ public class UserHandler extends AbstractHandler {
         }
         supplier.saveToFile(users);
         httpActions.post(getTemplateName());
+        supplier.ordinaryMsg("Continue? Yes/No");
+        supplier.continueQuestion(scanner.next().trim());
     }
 
     @Override
     protected void put() {
-//        'https://petstore.swagger.io/v2/user/string'
         supplier.ordinaryMsg("Print user name");
-        httpActions.get(getTemplateName(),"", scanner.next());
+        HttpResponse response = httpActions.get(getTemplateName(), "", scanner.next());
+        if (response.statusCode() == 200) {
+            User user = supplier.collectUser(response);
+            supplier.ordinaryMsg("Old id - " + user.getId() + ". Print new value.");
+            user.setId(scanner.nextLong());
+            supplier.ordinaryMsg("Old email - " + user.getEmail() + ". Print new value.");
+            user.setEmail(scanner.next());
+            supplier.ordinaryMsg("Old username - " + user.getUsername() + ". Print new value.");
+            user.setUsername(scanner.next());
+            supplier.ordinaryMsg("Old lastname - " + user.getLastName() + ". Print new value.");
+            user.setLastName(scanner.next());
+            supplier.ordinaryMsg("Old pass - " + user.getPassword() + ". Print new value.");
+            user.setPassword(scanner.next());
+            supplier.ordinaryMsg("Old phone - " + user.getPhone() + ". Print new value.");
+            user.setPhone(scanner.next());
+            supplier.ordinaryMsg("Old status - " + user.getUserStatus() + ". Print new value.");
+            user.setUserStatus(scanner.nextLong());
+
+            supplier.saveToFile(user);
+            httpActions.post(getTemplateName());
+        } else {
+            supplier.ordinaryMsg("User not found");
+        }
+        supplier.ordinaryMsg("Continue? Yes/No");
+        supplier.continueQuestion(scanner.next().trim());
     }
 }
