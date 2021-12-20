@@ -20,8 +20,9 @@ public class StoreHandler extends AbstractHandler {
     @Override
     protected void post() {
         Store store = supplier.createStore(scanner);
-        supplier.saveToFile(store);
-        httpActions.post(getTemplateName());
+//        supplier.saveToFile(store);
+        HttpResponse response = httpActions.post(getTemplateName(), store);
+
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());
     }

@@ -1,10 +1,7 @@
 package org.example.handlers;
 
-import org.example.model.store.Store;
+import org.example.model.ApiResponse;
 import org.example.model.user.User;
-import org.example.service.HttpActions;
-import org.example.service.Supplier;
-
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,8 +102,12 @@ public class UserHandler extends AbstractHandler {
     }
 
     private void userCreate() {
-        supplier.createUser(scanner);
-        httpActions.post(getTemplateName());
+        User user = supplier.createUser(scanner);
+        HttpResponse response = httpActions.post(getTemplateName(), user);
+
+        ApiResponse apiResponse = supplier.collectApiResponse(response);
+        supplier.ordinaryMsg(apiResponse.toString());
+
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());
     }
@@ -119,7 +120,11 @@ public class UserHandler extends AbstractHandler {
             users.add(supplier.createUser(scanner));
         }
         supplier.saveToFile(users);
-        httpActions.post(getTemplateName());
+        HttpResponse response = httpActions.post(getTemplateName(), users);
+
+        ApiResponse apiResponse = supplier.collectApiResponse(response);
+        supplier.ordinaryMsg(apiResponse.toString());
+
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());
     }
@@ -132,7 +137,11 @@ public class UserHandler extends AbstractHandler {
             users.add(supplier.createUser(scanner));
         }
         supplier.saveToFile(users);
-        httpActions.post(getTemplateName());
+        HttpResponse response = httpActions.post(getTemplateName(), users);
+
+        ApiResponse apiResponse = supplier.collectApiResponse(response);
+        supplier.ordinaryMsg(apiResponse.toString());
+
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());
     }
@@ -157,9 +166,7 @@ public class UserHandler extends AbstractHandler {
             user.setPhone(scanner.next());
             supplier.ordinaryMsg("Old status - " + user.getUserStatus() + ". Print new value.");
             user.setUserStatus(scanner.nextLong());
-
-            supplier.saveToFile(user);
-            httpActions.post(getTemplateName());
+            httpActions.post(getTemplateName(),user);
         } else {
             supplier.ordinaryMsg("User not found");
         }

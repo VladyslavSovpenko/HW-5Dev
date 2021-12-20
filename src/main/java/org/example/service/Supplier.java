@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.log4j.Logger;
 import org.example.MainInput;
+import org.example.model.ApiResponse;
 import org.example.model.pet.Category;
 import org.example.model.pet.Pet;
 import org.example.model.pet.Pets;
@@ -75,9 +76,14 @@ public class Supplier {
     }
 
     public Pets collectPets(HttpResponse response) {
-        Gson gson = new Gson();
+
         Pets pets = gson.fromJson(String.valueOf(response.body()), Pets.class);
         return pets;
+    }
+
+    public ApiResponse collectApiResponse(HttpResponse response){
+       ApiResponse apiResponse= gson.fromJson(String.valueOf(response.body()), ApiResponse.class);
+       return apiResponse;
     }
 
     public Pet createPets(Scanner scanner) {
@@ -121,9 +127,9 @@ public class Supplier {
         ordinaryMsg("Please, print status");
         store.setStatus(scanner.next());
         ordinaryMsg("Please, print complete. True/False");
-        store.setComplete(scanner.next());
-        Date date = new Date(System.currentTimeMillis());
-        store.setShipDate(date);
+        store.setComplete(scanner.nextBoolean());
+        ordinaryMsg("Please, date.");
+        store.setShipDate(scanner.next());
 
         return store;
     }
