@@ -1,9 +1,11 @@
 package org.example.handlers;
 
 import org.apache.log4j.Logger;
+import org.example.model.ApiResponse;
 import org.example.model.pet.Pet;
 import org.example.model.pet.Pets;
 import java.net.http.HttpResponse;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,10 +104,12 @@ public class PetHandler extends AbstractHandler {
         String name = scanner.next();
 
         Map<Object, Object> data = new HashMap<>();
-        data.put("additionalMetadata", "id");
-        data.put("file", name);
-        HttpResponse response = httpActions.postImage(params, data);
+        data.put("additionalMetadata", "MyPet");
+        data.put("file", Paths.get(name));
 
+        HttpResponse response = httpActions.postImage(params, data);
+        ApiResponse apiResponse = supplier.collectApiResponse(response);
+        supplier.ordinaryMsg(apiResponse.toString());
 
         supplier.ordinaryMsg("Continue? Yes/No");
         supplier.continueQuestion(scanner.next().trim());

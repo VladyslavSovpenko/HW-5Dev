@@ -14,7 +14,9 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -112,20 +114,20 @@ public class HttpActions {
         return response;
     }
 
+
     public HttpResponse postImage(String params, Map<Object, Object> data) {
         String url = "https://petstore.swagger.io/v2/pet/%s";
         String boundary = "-------------oiawn4tp89n4e9p5";
 
         HttpRequest request = null;
         try {
-            request = HttpRequest.newBuilder()
-                    .uri(URI.create(String.format(url, params)))
-                    .headers("accept", "application/json", "Content-Type",
-                            "multipart/form-data;boundary=" + boundary)
+            request = HttpRequest.newBuilder().uri(URI.create(String.format(url,params)))
+                    .headers("accept", "application/json",
+                            "Content-Type", "multipart/form-data; boundary=" + boundary)
                     .POST(oMultipartData(data, boundary))
                     .build();
         } catch (IOException e) {
-            LOGGER.error("Image not post", e);
+            e.printStackTrace();
         }
 
         HttpResponse<String> response = null;
@@ -133,13 +135,10 @@ public class HttpActions {
             response = client.send(request,
                     HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            LOGGER.error("Response problem", e);
+            e.printStackTrace();
         }
-        if (response.statusCode() == 200) {
-            supplier.ordinaryMsg("Image was sent");
-        } else {
-            supplier.ordinaryMsg("Image was not sent");
-        }
+        System.out.println("response statusCode = " + response.statusCode());
+        System.out.println("response body = " + response.body());
         return response;
     }
 
@@ -170,5 +169,4 @@ public class HttpActions {
                 .add(("--" + boundary + "--").getBytes(StandardCharsets.UTF_8));
         return HttpRequest.BodyPublishers.ofByteArrays(byteArrays);
     }
-
 }

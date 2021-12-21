@@ -10,8 +10,7 @@ public class ApiResponse {
         return "ApiResponse{" +
                 "code=" + code +
                 ", type='" + type + '\'' +
-                ", message='" + message + '\'' +
-                '}';
+                ", message='" + message + '}';
     }
 
     public Long getCode() {
