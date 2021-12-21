@@ -137,8 +137,7 @@ public class HttpActions {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("response statusCode = " + response.statusCode());
-        System.out.println("response body = " + response.body());
+
         return response;
     }
 
